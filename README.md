@@ -1,6 +1,6 @@
 # IA Help
 
-<img src="https://raw.githubusercontent.com/rafaeldevelloper/Pim-IaHelp/main/UI/Resources/Logo-Pim-IaHelp.jpg" alt="Logo do IA Help" width="300"/>
+<img src="C:\Users\rafae\Downloads\Logo-Pim-IaHelp.jpg" alt="Logo do IA Help" width="300"/>
 
 **Sistema Integrado para Gestão de Chamados e Suporte Técnico Baseado em IA**
 
