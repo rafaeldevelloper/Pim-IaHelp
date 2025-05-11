@@ -1,4 +1,8 @@
-# Sistema de Cadastro de Usuários
+# IA Help
+
+![Logo do IA Help]("C:\Users\rafae\Downloads\Logo-Pim-IaHelp.jpg")
+
+**Sistema Integrado para Gestão de Chamados e Suporte Técnico Baseado em IA**
 
 Este é um sistema de cadastro de usuários simples desenvolvido em C# com integração ao banco de dados PostgreSQL. O sistema permite o registro de novos usuários com validações de dados e prevenção de cadastros duplicados (por e-mail, nome completo e senha). A aplicação também conta com segurança na senha, com possibilidade de hashing para armazená-las de forma segura.
 
