@@ -1,6 +1,6 @@
 # IA Help
 
-![Logo do IA Help]("C:\Users\rafae\Downloads\Logo-Pim-IaHelp.jpg")
+![Logo do IA Help](https://raw.githubusercontent.com/rafaeldevelloper/Pim-IaHelp/main/UI/Resources/Logo-Pim-IaHelp.jpg)
 
 **Sistema Integrado para Gestão de Chamados e Suporte Técnico Baseado em IA**
 
