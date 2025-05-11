@@ -1,6 +1,6 @@
 # IA Help
 
-![Logo do IA Help](https://raw.githubusercontent.com/rafaeldevelloper/Pim-IaHelp/main/UI/Resources/Logo-Pim-IaHelp.jpg)
+<img src="https://raw.githubusercontent.com/rafaeldevelloper/Pim-IaHelp/main/UI/Resources/Logo-Pim-IaHelp.jpg" alt="Logo do IA Help" width="300"/>
 
 **Sistema Integrado para Gestão de Chamados e Suporte Técnico Baseado em IA**
 
