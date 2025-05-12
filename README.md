@@ -57,6 +57,17 @@ Este é um sistema de cadastro de usuários simples desenvolvido em C# com integ
     );
     ```
 
+    ```sql
+        CREATE TABLE chamados (
+            id SERIAL PRIMARY KEY,
+            nome_usuario VARCHAR(100) NOT NULL,
+            setor_problema VARCHAR(100) NOT NULL,
+            tipo_problema VARCHAR(100) NOT NULL,
+            prioridade_problema VARCHAR(50) NOT NULL,
+            detalhes_problema TEXT NOT NULL
+    );
+    ```
+
 5. Compile e execute o projeto.
 
 ## Uso
