@@ -1,90 +1,119 @@
-# 📄 Documentação do Back-End — IA Help
+# 📄 Guia do Back-End — IA Help
 
 ![Logo do IA Help](https://github.com/rafaeldevelloper/Pim-IaHelp/blob/master/UI/Resources/Logo-Pim-IaHelp.jpg)
 
-## Visão Geral
+## O que é o Back-End do IA Help?
 
-O **Back-End** do sistema **IA Help** é responsável por implementar toda a lógica de negócios referente ao cadastro, validação e persistência de usuários, bem como a estrutura de dados relacionada aos chamados de suporte técnico. Desenvolvido em **C#** com arquitetura simples, o sistema estabelece uma comunicação eficiente com o banco de dados **PostgreSQL**, garantindo segurança, integridade e confiabilidade das informações.
+O Back-End é a parte “invisível” do sistema **IA Help**, onde acontece toda a lógica por trás das telas. É ele que recebe as informações que o usuário digita, confere se está tudo certo, e salva no banco de dados de forma segura. Além disso, cuida do registro de chamados para suporte técnico.
 
-## Arquitetura e Estrutura
+Esse sistema foi feito com **C#** e usa o banco de dados **PostgreSQL** para armazenar as informações.
 
-O sistema segue um modelo monolítico baseado em **camadas** lógicas:
+---
 
-- **Camada de Apresentação (UI)**: Interface construída com **Windows Forms**, responsável pela interação com o usuário.
-- **Camada de Lógica de Negócios**: Implementada em C#, é responsável pelas validações, regras de negócio e manipulação de dados.
-- **Camada de Persistência**: Realiza a comunicação direta com o banco de dados PostgreSQL, executando comandos de inserção, consulta e validação de registros.
+## Como o sistema funciona por trás?
 
-## Principais Funcionalidades do Back-End
+O IA Help foi dividido em três partes principais:
 
-### 1. Cadastro de Usuários
+- **Interface (UI)**: onde o usuário vê e interage (feita com **Windows Forms**).
+- **Lógica do sistema**: onde ficam as regras — como validar dados e decidir o que pode ou não ser salvo.
+- **Banco de Dados**: onde as informações ficam guardadas de forma organizada e segura.
 
-- Recebe dados de entrada (nome completo, e-mail, senha, data de nascimento).
-- Realiza validações:
-  - Campos obrigatórios.
-  - Formato de e-mail utilizando **expressões regulares** (Regex).
-  - Verificação de unicidade (nome completo, e-mail e senha) para evitar registros duplicados.
-- Caso os dados sejam válidos e únicos, realiza a inserção no banco de dados.
+---
 
-### 2. Validação e Tratamento de Dados
+## O que o Back-End faz?
 
-- **Validação de Campos**: Garantia de que nenhum campo obrigatório seja deixado em branco.
-- **Validação de E-mail**: Expressão regular que assegura o padrão correto.
-- **Validação de Duplicatas**: Consulta prévia ao banco para verificar se já existe usuário com o mesmo e-mail, nome ou senha.
+### ✅ Cadastro de Usuários
 
-### 3. Segurança
+- Recebe dados como nome, e-mail, senha e data de nascimento.
+- Verifica se:
+  - Todos os campos foram preenchidos.
+  - O e-mail está no formato correto.
+  - Não existe outro usuário com o mesmo nome, e-mail ou senha (evita cadastros duplicados).
+- Se tudo estiver certo, salva os dados no banco.
 
-- Implementação opcional de **hashing de senhas** (recomendado para produção), evitando o armazenamento de senhas em texto puro.
-- Prevenção de **SQL Injection** através da utilização de comandos parametrizados.
+---
 
-### 4. Manipulação de Chamados
+### ✅ Validações importantes
 
-- Modelagem e inserção de registros na tabela **`chamados`**:
-  - Armazenamento de informações como usuário solicitante, setor, tipo, prioridade e detalhes do problema.
-- Possibilita futura extensão para CRUD completo de chamados.
+Antes de guardar qualquer coisa, o sistema confere:
 
-## Estrutura do Banco de Dados
+- Se os campos obrigatórios foram preenchidos.
+- Se o e-mail segue um formato válido (exemplo: nome@dominio.com).
+- Se não há outro cadastro com os mesmos dados.
 
-O sistema utiliza o **PostgreSQL** como Sistema Gerenciador de Banco de Dados Relacional (SGBDR), com duas principais tabelas:
+---
 
-### Tabela: `usuarios`
+### ✅ Segurança
 
-| Campo             | Tipo         | Restrições           |
-| ----------------- | ------------ | -------------------- |
-| id                | SERIAL       | PRIMARY KEY          |
-| nome_completo     | VARCHAR(255) | NOT NULL             |
-| email             | VARCHAR(255) | UNIQUE, NOT NULL     |
-| senha             | VARCHAR(255) | NOT NULL             |
-| data_nascimento   | DATE         | NOT NULL             |
+- Recomendamos guardar as senhas de forma protegida, usando **hash** (hoje, o sistema aceita, mas ainda não implementa isso por padrão).
+- Usa formas de evitar ataques como **SQL Injection** ao trabalhar com comandos seguros no banco.
 
-### Tabela: `chamados`
+---
 
-| Campo               | Tipo         | Restrições           |
-| ------------------- | ------------ | -------------------- |
-| id                  | SERIAL       | PRIMARY KEY          |
-| nome_usuario        | VARCHAR(100) | NOT NULL             |
-| setor_problema      | VARCHAR(100) | NOT NULL             |
-| tipo_problema       | VARCHAR(100) | NOT NULL             |
-| prioridade_problema | VARCHAR(50)  | NOT NULL             |
-| detalhes_problema   | TEXT         | NOT NULL             |
+### ✅ Chamados de Suporte
 
-## Tecnologias e Ferramentas
+O sistema também permite cadastrar **chamados**. Isso inclui:
 
-- **C#**: Linguagem de desenvolvimento Back-End.
-- **Npgsql**: Biblioteca para conexão entre C# e PostgreSQL.
-- **PostgreSQL**: Banco de dados relacional.
-- **Regex**: Para validação de e-mails.
-- **Windows Forms**: Utilizado apenas para interface, mas integrado ao fluxo de Back-End.
+- Quem está relatando o problema.
+- Qual setor e tipo de problema.
+- Qual a prioridade.
+- E todos os detalhes importantes.
 
-## Fluxo de Processamento
+**Obs.:** hoje o foco está no cadastro, mas a ideia é expandir para um controle completo (CRUD).
 
-1. **Recepção de Dados** → Usuário insere as informações.
-2. **Validação** → Sistema valida o formato e unicidade dos dados.
-3. **Persistência** → Caso válido, insere no banco de dados.
-4. **Resposta ao Usuário** → Feedback de sucesso ou erro.
+---
 
-## Configuração da Conexão com o Banco de Dados
+## Como o banco de dados está organizado?
 
-Arquivo: `ConectionBD.cs`
+O sistema usa duas tabelas principais no **PostgreSQL**:
+
+### 🗃️ Tabela de Usuários (`usuarios`)
+
+| Campo             | Tipo de dado |
+| ----------------- | ------------ |
+| id                | Número único (chave primária) |
+| nome_completo     | Texto |
+| email             | Texto (não pode repetir) |
+| senha             | Texto |
+| data_nascimento   | Data |
+
+---
+
+### 🗃️ Tabela de Chamados (`chamados`)
+
+| Campo               | Tipo de dado |
+| ------------------- | ------------ |
+| id                  | Número único (chave primária) |
+| nome_usuario        | Texto |
+| setor_problema      | Texto |
+| tipo_problema       | Texto |
+| prioridade_problema | Texto |
+| detalhes_problema   | Texto longo |
+
+---
+
+## O que usamos para fazer isso acontecer?
+
+- **C#**: a linguagem que usamos para programar.
+- **PostgreSQL**: onde guardamos todos os dados.
+- **Npgsql**: biblioteca que faz a ponte entre C# e o banco.
+- **Regex**: ajuda a verificar se o e-mail está bem escrito.
+- **Windows Forms**: onde criamos as janelas e formulários do sistema.
+
+---
+
+## Como o processo acontece passo a passo?
+
+1. O usuário preenche as informações.
+2. O sistema valida e verifica se já existe um cadastro igual.
+3. Se estiver tudo certo, salva no banco.
+4. O sistema avisa se deu tudo certo ou se teve algum erro.
+
+---
+
+## Como configurar a conexão com o banco?
+
+Dentro do código, no arquivo `ConectionBD.cs`, tem esta configuração:
 
 ```csharp
 private string connectionString = "Host=localhost;Port=5432;Username=postgres;Password=sua-senha;Database=bd-iahelp";
