@@ -1,87 +1,90 @@
-# IA Help
+# 📄 Documentação do Back-End — IA Help
 
 ![Logo do IA Help](https://github.com/rafaeldevelloper/Pim-IaHelp/blob/master/UI/Resources/Logo-Pim-IaHelp.jpg)
 
-**Sistema Integrado para Gestão de Chamados e Suporte Técnico Baseado em IA**
+## Visão Geral
 
-Este é um sistema de cadastro de usuários simples desenvolvido em C# com integração ao banco de dados PostgreSQL. O sistema permite o registro de novos usuários com validações de dados e prevenção de cadastros duplicados (por e-mail, nome completo e senha). A aplicação também conta com segurança na senha, com possibilidade de hashing para armazená-las de forma segura.
+O **Back-End** do sistema **IA Help** é responsável por implementar toda a lógica de negócios referente ao cadastro, validação e persistência de usuários, bem como a estrutura de dados relacionada aos chamados de suporte técnico. Desenvolvido em **C#** com arquitetura simples, o sistema estabelece uma comunicação eficiente com o banco de dados **PostgreSQL**, garantindo segurança, integridade e confiabilidade das informações.
 
-## Funcionalidades
+## Arquitetura e Estrutura
 
-- **Cadastro de Usuários**: Permite que novos usuários se cadastrem no sistema com nome completo, e-mail, senha e data de nascimento.
-- **Validação de Dados**: O sistema valida campos obrigatórios e checa se os dados fornecidos são válidos, como e-mail e senha.
-- **Prevenção de Dados Duplicados**: Antes de inserir um novo usuário, o sistema verifica se já existe um cadastro com o mesmo nome completo, e-mail ou senha.
-- **Erro de Cadastro**: Caso os dados já estejam cadastrados, o sistema retorna uma mensagem de erro e limpa os campos para o usuário tentar novamente.
-- **Banco de Dados**: Utiliza PostgreSQL para armazenar os dados dos usuários, com tabelas e relacionamento simples.
+O sistema segue um modelo monolítico baseado em **camadas** lógicas:
 
-## Tecnologias Utilizadas
+- **Camada de Apresentação (UI)**: Interface construída com **Windows Forms**, responsável pela interação com o usuário.
+- **Camada de Lógica de Negócios**: Implementada em C#, é responsável pelas validações, regras de negócio e manipulação de dados.
+- **Camada de Persistência**: Realiza a comunicação direta com o banco de dados PostgreSQL, executando comandos de inserção, consulta e validação de registros.
 
-- **C#**: Linguagem de programação principal para a construção da aplicação.
-- **PostgreSQL**: Banco de dados relacional para armazenamento dos dados.
-- **Windows Forms**: Interface gráfica para interação com o usuário.
-- **Regex**: Validação de e-mail usando expressões regulares.
+## Principais Funcionalidades do Back-End
 
-## Instalação
+### 1. Cadastro de Usuários
 
-### Pré-requisitos
+- Recebe dados de entrada (nome completo, e-mail, senha, data de nascimento).
+- Realiza validações:
+  - Campos obrigatórios.
+  - Formato de e-mail utilizando **expressões regulares** (Regex).
+  - Verificação de unicidade (nome completo, e-mail e senha) para evitar registros duplicados.
+- Caso os dados sejam válidos e únicos, realiza a inserção no banco de dados.
 
-- .NET Framework (Recomenda-se a versão 4.7 ou superior)
-- PostgreSQL instalado e configurado
-- Visual Studio ou IDE compatível com C#
+### 2. Validação e Tratamento de Dados
 
-### Passos para Configuração
+- **Validação de Campos**: Garantia de que nenhum campo obrigatório seja deixado em branco.
+- **Validação de E-mail**: Expressão regular que assegura o padrão correto.
+- **Validação de Duplicatas**: Consulta prévia ao banco para verificar se já existe usuário com o mesmo e-mail, nome ou senha.
 
-1. Clone este repositório para sua máquina local:
+### 3. Segurança
 
-    ```bash
-    git clone https://github.com/seu-usuario/sistema-cadastro-usuarios.git
-    ```
+- Implementação opcional de **hashing de senhas** (recomendado para produção), evitando o armazenamento de senhas em texto puro.
+- Prevenção de **SQL Injection** através da utilização de comandos parametrizados.
 
-2. Abra o projeto no Visual Studio ou sua IDE de preferência.
+### 4. Manipulação de Chamados
 
-3. No arquivo `ConectionBD.cs`, configure a string de conexão com o banco de dados PostgreSQL:
+- Modelagem e inserção de registros na tabela **`chamados`**:
+  - Armazenamento de informações como usuário solicitante, setor, tipo, prioridade e detalhes do problema.
+- Possibilita futura extensão para CRUD completo de chamados.
 
-    ```csharp
-    private string connectionString = "Host=localhost;Port=5432;Username=postgres;Password=sua-senha;Database=bd-iahelp";
-    ```
+## Estrutura do Banco de Dados
 
-4. Certifique-se de que a tabela de usuários no PostgreSQL já foi criada e contém os campos adequados, ou use o seguinte script para criar:
+O sistema utiliza o **PostgreSQL** como Sistema Gerenciador de Banco de Dados Relacional (SGBDR), com duas principais tabelas:
 
-    ```sql
-    CREATE TABLE usuarios (
-        id SERIAL PRIMARY KEY,
-        nome_completo VARCHAR(255) NOT NULL,
-        email VARCHAR(255) UNIQUE NOT NULL,
-        senha VARCHAR(255) NOT NULL,
-        data_nascimento DATE NOT NULL
-    );
-    ```
+### Tabela: `usuarios`
 
-    ```sql
-        CREATE TABLE chamados (
-            id SERIAL PRIMARY KEY,
-            nome_usuario VARCHAR(100) NOT NULL,
-            setor_problema VARCHAR(100) NOT NULL,
-            tipo_problema VARCHAR(100) NOT NULL,
-            prioridade_problema VARCHAR(50) NOT NULL,
-            detalhes_problema TEXT NOT NULL
-    );
-    ```
+| Campo             | Tipo         | Restrições           |
+| ----------------- | ------------ | -------------------- |
+| id                | SERIAL       | PRIMARY KEY          |
+| nome_completo     | VARCHAR(255) | NOT NULL             |
+| email             | VARCHAR(255) | UNIQUE, NOT NULL     |
+| senha             | VARCHAR(255) | NOT NULL             |
+| data_nascimento   | DATE         | NOT NULL             |
 
-5. Compile e execute o projeto.
+### Tabela: `chamados`
 
-## Uso
+| Campo               | Tipo         | Restrições           |
+| ------------------- | ------------ | -------------------- |
+| id                  | SERIAL       | PRIMARY KEY          |
+| nome_usuario        | VARCHAR(100) | NOT NULL             |
+| setor_problema      | VARCHAR(100) | NOT NULL             |
+| tipo_problema       | VARCHAR(100) | NOT NULL             |
+| prioridade_problema | VARCHAR(50)  | NOT NULL             |
+| detalhes_problema   | TEXT         | NOT NULL             |
 
-1. Abra a aplicação.
-2. Preencha os campos no formulário de cadastro (nome completo, e-mail, senha, confirmação de senha e data de nascimento).
-3. Clique em **"Cadastrar"** para tentar registrar o usuário.
-4. Caso o e-mail já esteja registrado, ou qualquer outro dado esteja duplicado, o sistema exibirá uma mensagem de erro e limpará os campos.
-5. Caso o cadastro seja bem-sucedido, o sistema mostrará uma mensagem de sucesso.
+## Tecnologias e Ferramentas
 
-## Contribuições
+- **C#**: Linguagem de desenvolvimento Back-End.
+- **Npgsql**: Biblioteca para conexão entre C# e PostgreSQL.
+- **PostgreSQL**: Banco de dados relacional.
+- **Regex**: Para validação de e-mails.
+- **Windows Forms**: Utilizado apenas para interface, mas integrado ao fluxo de Back-End.
 
-Contribuições são bem-vindas! Se você tiver alguma sugestão, correção ou melhoria para o projeto, sinta-se à vontade para abrir uma *issue* ou enviar um *pull request*.
+## Fluxo de Processamento
 
-## Licença
+1. **Recepção de Dados** → Usuário insere as informações.
+2. **Validação** → Sistema valida o formato e unicidade dos dados.
+3. **Persistência** → Caso válido, insere no banco de dados.
+4. **Resposta ao Usuário** → Feedback de sucesso ou erro.
 
-Distribuído sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+## Configuração da Conexão com o Banco de Dados
+
+Arquivo: `ConectionBD.cs`
+
+```csharp
+private string connectionString = "Host=localhost;Port=5432;Username=postgres;Password=sua-senha;Database=bd-iahelp";
